@@ -1,0 +1,68 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    <main class="max-w-6xl mx-auto px-4 py-12">
+      <div class="text-center mb-16 animate-fade-in">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Discover stories, thinking, and expertise from writers on any topic.
+        </p>
+      </div>
+
+      <div class="grid gap-12">
+        {posts.map((post, index) => (
+          <article class={`group grid md:grid-cols-5 gap-8 items-start animate-fade-in`} style={`animation-delay: ${index * 100}ms`}>
+            <div class="md:col-span-2 aspect-video overflow-hidden rounded-2xl">
+              <a href={`/blog/${post.slug}/`}>
+                <img 
+                  src={post.data.heroImage} 
+                  alt="" 
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </a>
+            </div>
+            <div class="md:col-span-3">
+              <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                <FormattedDate date={post.data.pubDate} />
+                {post.data.category && (
+                  <span class="px-2 py-1 bg-gray-100 rounded-full">{post.data.category}</span>
+                )}
+              </div>
+              <h2 class="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">
+                <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
+              </h2>
+              <p class="text-gray-600 mb-4 line-clamp-2">{post.data.description}</p>
+              <a 
+                href={`/blog/${post.slug}/`}
+                class="inline-flex items-center text-primary font-medium group-hover:text-secondary transition-colors"
+              >
+                Read More
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
