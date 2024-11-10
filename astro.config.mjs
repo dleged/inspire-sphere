@@ -7,6 +7,7 @@ import tailwind from '@astrojs/tailwind';
 // Replace "your-repo-name" with your repository name
 export default defineConfig({
   site: 'https://your-username.github.io',
-  base: '/your-repo-name',
+  base: '/',
+  outDir: 'docs',
   integrations: [mdx(), sitemap(), tailwind()],
 });
