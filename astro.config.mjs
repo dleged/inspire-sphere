@@ -5,7 +5,10 @@ import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
   site: 'https://your-username.github.io',
-  base: '/wiki',
+  base: '/inspire-sphere',
   outDir: 'docs',
+  build: {
+    assetsPrefix: '/inspire-sphere'
+  },
   integrations: [mdx(), sitemap(), tailwind()],
 });
